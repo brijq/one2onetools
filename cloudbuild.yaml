@@ -1,16 +1,14 @@
 steps:
-#Install
-- name: 'gcr.io/cloud-builders/npm'
-  args: ['install']
+# Build the container image
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/dcube-258607/one2onetool', '.']
 
-#Test
-- name: 'gcr.io/cloud-builders/npm'
-  args: ['run', 'test:unit']
-
-#Build
-- name: 'gcr.io/cloud-builders/npm'
-  args: ['run' , 'build']
+# Push the image to Container Registry
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/dcube-258607/one2onetool']
 
 #Deploy
-- name: 'gcr.io/$PROJECT_ID/firebase'
-  args: ['deploy']
+# Deploy an image from Container Registry to Cloud Run
+- name: 'gcr.io/cloud-builders/gcloud'
+  args: ['beta', 'run', 'deploy', 'one2onetools', '--image', 'gcr.io/$PROJECT_ID/one2onetool', '--region', asia-northeast1, '--platform', 'managed', '--allow-unauthenticated']
+
