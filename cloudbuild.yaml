@@ -16,29 +16,29 @@ steps:
   args: ['rmi', 'gcr.io/dcube-258607/one2onetool:latest']
 
 - name: 'gcr.io/cloud-builders/gcloud'
-    entrypoint: 'bash'
-    args: 
-      - '-c'
-      - |
-        set -e
+  entrypoint: 'bash'
+  args: 
+    - '-c'
+    - |
+      set -e
         
-        apt update && apt install -y jq
+      apt update && apt install -y jq
         
-        images="one2onetool"
-        for image in ${images[@]}; do
-          echo "Cleaning image ${image}"
-          c=0
-          image="gcr.io/$PROJECT_ID/${image}"
-          number_keep_images=${_IMG_KEEP}
-          date=$(gcloud container images list-tags $image --limit=unlimited \
-            --sort-by=~TIMESTAMP --format=json | TZ=/usr/share/zoneinfo/UTC jq -r '.['$number_keep_images'].timestamp.datetime | sub("(?<before>.*):"; .before ) | strptime("%Y-%m-%d %H:%M:%S%z") | mktime | strftime("%Y-%m-%d")')
-          for digest in $(gcloud container images list-tags $image --limit=unlimited --sort-by=~TIMESTAMP \
-            --filter="timestamp.datetime < '${date}'" --format='get(digest)'); do
-            (
-              set -x
-              gcloud container images delete -q --force-delete-tags "${image}@${digest}"
-            )
-            c=c+1
-          done
-          echo "Deleted ${c} images for ${image}." >&2
-        fi
+      images="one2onetool"
+      for image in ${images[@]}; do
+        echo "Cleaning image ${image}"
+        c=0
+        image="gcr.io/dcube-258607/${image}"
+        number_keep_images=${_IMG_KEEP}
+        date=$(gcloud container images list-tags $image --limit=unlimited \
+          --sort-by=~TIMESTAMP --format=json | TZ=/usr/share/zoneinfo/UTC jq -r '.['$number_keep_images'].timestamp.datetime | sub("(?<before>.*):"; .before ) | strptime("%Y-%m-%d %H:%M:%S%z") | mktime | strftime("%Y-%m-%d")')
+        for digest in $(gcloud container images list-tags $image --limit=unlimited --sort-by=~TIMESTAMP \
+          --filter="timestamp.datetime < '${date}'" --format='get(digest)'); do
+          (
+            set -x
+            gcloud container images delete -q --force-delete-tags "${image}@${digest}"
+          )
+          c=c+1
+        done
+        echo "Deleted ${c} images for ${image}." >&2
+      fi
