@@ -1,7 +1,7 @@
 steps:
 # Build the container image
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'gcr.io/dcube-258607/one2onetool', 'script-runner', '.']
+  args: ['build', '-t', 'gcr.io/dcube-258607/one2onetool', '.']
 
 # Push the image to Container Registry
 - name: 'gcr.io/cloud-builders/docker'
@@ -11,10 +11,11 @@ steps:
 - name: 'gcr.io/cloud-builders/gcloud'
   args: ['beta', 'run', 'deploy', 'one2onetools', '--image', 'gcr.io/$PROJECT_ID/one2onetool', '--region', asia-northeast1, '--platform', 'managed', '--allow-unauthenticated']
 
-# Remove the image to Container Registry
+# Remove the image from Docker Image Container
 - name: 'gcr.io/cloud-builders/docker'
   args: ['rmi', 'gcr.io/dcube-258607/one2onetool:latest']
 
-  # Remove Docker Image from Container Registry
-- name: 'script-runner'
-  args: ['bash', './removeDocker.bash']
+# Remove the image from Google Container Registry
+- name: 'gcr.io/cloud-builders/gcloud'
+  entrypoint: 'bash'
+  args: ['-c', './integration_tests/removeDocker.sh']
