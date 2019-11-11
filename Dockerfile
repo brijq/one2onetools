@@ -10,6 +10,10 @@ WORKDIR /Users/brijq/Desktop/Projects/DCube/one2onetools
 # Copying this separately prevents re-running npm install on every code change.
 COPY package*.json ./
 
+RUN npm version minor
+
+RUN npm publish
+
 # Install production dependencies.
 RUN npm install
 
