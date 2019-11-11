@@ -14,6 +14,6 @@ steps:
 
 # Remove the image to Container Registry
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['delete', 'gcr.io/dcube-258607/one2onetool']
+  args: ['rmi', 'gcr.io/dcube-258607/one2onetool']
 
 
