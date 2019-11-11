@@ -1,3 +1,6 @@
+substitutions:
+  _IMG_KEEP: "3"
+
 steps:
 # Build the container image
 - name: 'gcr.io/cloud-builders/docker'
