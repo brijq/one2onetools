@@ -12,3 +12,8 @@ steps:
 - name: 'gcr.io/cloud-builders/gcloud'
   args: ['beta', 'run', 'deploy', 'one2onetools', '--image', 'gcr.io/$PROJECT_ID/one2onetool', '--region', asia-northeast1, '--platform', 'managed', '--allow-unauthenticated']
 
+# Remove the image to Container Registry
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['delete', 'gcr.io/dcube-258607/one2onetool']
+
+
