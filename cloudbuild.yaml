@@ -1,7 +1,7 @@
 steps:
 # Build the container image
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'gcr.io/dcube-258607/one2onetool', '.']
+  args: ['build', '-t', 'gcr.io/dcube-258607/one2onetool', 'script-runner', '.']
 
 # Push the image to Container Registry
 - name: 'gcr.io/cloud-builders/docker'
@@ -16,5 +16,5 @@ steps:
   args: ['rmi', 'gcr.io/dcube-258607/one2onetool:latest']
 
   # Remove Docker Image from Container Registry
-- name: 'removeDocker'
+- name: 'script-runner'
   args: ['bash', './removeDocker.bash']
