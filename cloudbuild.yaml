@@ -18,4 +18,4 @@ steps:
 # Remove the image from Google Container Registry
 - name: 'gcr.io/cloud-builders/gcloud'
   entrypoint: 'bash'
-  args: ['-c', './integration_tests/removeDocker.sh']
+  args: ['-c', './removeDocker.sh']
